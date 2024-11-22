@@ -1,53 +1,85 @@
 import json
 import os
 import re
-
 import pandas as pd
 
-filepath = 'C:\\Users\\Kishan\\Documents\\Personal\\mplog'
+# File paths
+log_folder = 'C:\\Users\\Kishan\\Documents\\Personal\\mplog'
+log_state_file = 'readlogs.txt'
+output_file = 'local.xlsx'
+input_file = 'Outcomes.xls'
+
+# Regex pattern
+pattern = r"Output chosen: (Option[12](Success|Failure)) for (\d+):"
 
 
-def read_logs():
-    global filepath, seen_logs
+def load_or_initialize_dataframe():
+    """Load the existing DataFrame or create a new one with added columns."""
+    if os.path.isfile(output_file):
+        df = pd.read_excel(output_file)
+    else:
+        if not os.path.isfile(input_file):
+            raise FileNotFoundError(f"Input file '{input_file}' not found.")
+        df = pd.read_excel(input_file)
+        create_output(df)
+    return df
+
+
+def create_output(df):
+    """Add boolean columns to the DataFrame and save it."""
+    for col in ['O1S', 'O1F', 'O2S', 'O2F']:
+        df[col] = False
+    df.to_excel(output_file, index=False)
+
+
+def load_seen_logs():
+    """Load the list of processed log files."""
+    if os.path.isfile(log_state_file):
+        with open(log_state_file, 'r') as f:
+            return json.load(f)
+    return []
+
+
+def save_logs_state(seen_logs):
+    """Save the updated list of processed log files."""
+    with open(log_state_file, 'w') as f:
+        json.dump(seen_logs, f)
+
+
+def read_logs(df, filepath, seen_logs):
+    """Read and process logs from the specified folder."""
     for file in os.listdir(filepath):
         if file in seen_logs:
             continue
         seen_logs.append(file)
-        file = f"{filepath}\\{file}"
-        lines = [l.strip() for l in open(file).readlines()]
+        full_path = os.path.join(filepath, file)
+        with open(full_path, 'r') as f:
+            lines = [line.strip() for line in f.readlines()]
         for line in lines:
             if 'Output chosen' in line:
                 match = re.search(pattern, line)
                 if match:
                     option, number = match.group(1), match.group(3)
-                    option = option[0] + option[6:8]
+                    option = option[0] + option[6:8]  # Format Option1Success to O1S
                     number = int(number)
                     df.loc[df['N'] == number, option] = True
+    return df
 
 
-def create_output():
-    df['O1S'] = False
-    df['O1F'] = False
-    df['O2S'] = False
-    df['O2F'] = False
-    df.to_excel('local.xlsx')
+# Main workflow
+if __name__ == "__main__":
+    if not os.path.isdir(log_folder):
+        raise FileNotFoundError(f"The folder '{log_folder}' does not exist.")
 
+    # Load or initialize data
+    df = load_or_initialize_dataframe()
 
-pattern = r"Output chosen: (Option[12](Success|Failure)) for (\d+):"
+    # Load seen logs
+    seen_logs = load_seen_logs()
 
-if os.path.isfile('local.xls'):
-    df = pd.read_excel('local.xlsx')
-else:
-    df = pd.read_excel('Outcomes.xls')
-    create_output()
+    # Process logs and update the DataFrame
+    df = read_logs(df, log_folder, seen_logs)
 
-if os.path.isfile('readlogs.txt'):
-    with open('readlogs.txt', 'r') as f:
-        seen_logs = json.load(f)  # Load the list correctly
-else:
-    seen_logs = []
-
-read_logs()
-with open('readlogs.txt', 'w') as f:
-    json.dump(seen_logs, f)  # Save the list properly
-df.to_excel('local.xlsx')
+    # Save updated state
+    save_logs_state(seen_logs)
+    df.to_excel(output_file, index=False)
