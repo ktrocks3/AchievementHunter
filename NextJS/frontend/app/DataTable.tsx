@@ -15,8 +15,8 @@ import {
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
-import { Button } from "@/src/components/ui/button"
-import { Checkbox } from "@/src/components/ui/checkbox"
+import { Button } from "./src/components/ui/button"
+import { Checkbox } from "./src/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -25,8 +25,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu"
-import { Input } from "@/src/components/ui/input"
+} from "./src/components/ui/dropdown-menu"
+import { Input } from "./src/components/ui/input"
 import {
   Table,
   TableBody,
@@ -34,7 +34,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table"
+} from "./src/components/ui/table"
 
 const data: Payment[] = [
   {
@@ -83,7 +83,7 @@ export const columns: ColumnDef<Payment>[] = [
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected())
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"

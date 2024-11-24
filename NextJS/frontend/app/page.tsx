@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import styles from './page.module.css'
 import logo from '@/assets/logo.png'
 import Image from 'next/image'
-import { Button } from '@/src/components/ui/button'
+import { Button } from './src/components/ui/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder } from '@fortawesome/free-solid-svg-icons'
 import { DataTableDemo } from './DataTable'
+import './globals.css'
 
 export default function Home() {
 	const [folderPath, setFolderPath] = useState('')

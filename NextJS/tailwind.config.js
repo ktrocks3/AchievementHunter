@@ -4,7 +4,6 @@ export default {
 	content: [
 		'./frontend/**/*.{js,ts,jsx,tsx}',
 		'./backend/**/*.{js,ts,jsx,tsx}',
-		'./@/components/**/*.{ts,tsx}',
 		'./app/**/*.{ts,tsx}',
 	],
 	theme: {
