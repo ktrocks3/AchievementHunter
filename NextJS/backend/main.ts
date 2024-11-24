@@ -3,7 +3,6 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import log from 'electron-log'
 import electronUpdater from 'electron-updater'
 import electronIsDev from 'electron-is-dev'
-import ElectronStore from 'electron-store'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 
@@ -12,7 +11,6 @@ const __dirname = dirname(__filename)
 const { autoUpdater } = electronUpdater
 let appWindow: BrowserWindow | null = null
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const store = new ElectronStore()
 
 class AppUpdater {
 	constructor() {

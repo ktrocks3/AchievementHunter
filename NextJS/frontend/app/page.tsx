@@ -7,7 +7,6 @@ import { Button } from './src/components/ui/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder } from '@fortawesome/free-solid-svg-icons'
 import { DataTableDemo } from './DataTable'
-import './globals.css'
 
 export default function Home() {
 	const [folderPath, setFolderPath] = useState('')
@@ -29,6 +28,10 @@ export default function Home() {
 			setFolderPath(selectedPath)
 			await window.BloopAPI.setStoredFolder(selectedPath) // Save to persistent storage
 		}
+	}
+
+ 	const banana = async () => {
+
 	}
 
 	const handleClearFolder = async () => {
@@ -64,15 +67,20 @@ export default function Home() {
 					</div>
 				)}
 
-				{folderPath && <DataTableDemo></DataTableDemo>}
 				{folderPath && (
 					<div className={styles.header}>
 						<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 							<p>Chosen folder: {folderPath}</p>
 							<Button onClick={handleClearFolder}>Clear Folder</Button>
 						</div>
+
+						<Button onClick={banana}>Banana</Button>
 					</div>
 				)}
+
+				{folderPath && <DataTableDemo></DataTableDemo>}
+
+
 				<footer className={styles.footer}>
 					{folderPath
 						? 'Achievement hunter by < / > ktrocks3'
