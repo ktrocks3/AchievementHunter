@@ -1,31 +1,81 @@
+'use client'
+import React, { useEffect, useState } from 'react'
 import styles from './page.module.css'
-import EditSVG from '@/assets/edit.svg'
-import Menhera from '@/assets/menhera.png'
+import logo from '@/assets/logo.png'
 import Image from 'next/image'
+import { Button } from '@/src/components/ui/button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFolder } from '@fortawesome/free-solid-svg-icons'
+import { DataTableDemo } from './DataTable'
 
 export default function Home() {
+	const [folderPath, setFolderPath] = useState('')
+
+	// Load the stored folder path when the component mounts
+	useEffect(() => {
+		const loadStoredFolder = async () => {
+			const storedFolder = await window.BloopAPI.getStoredFolder()
+			if (storedFolder) {
+				setFolderPath(storedFolder)
+			}
+		}
+		loadStoredFolder()
+	}, [])
+
+	const handleSelectFolder = async () => {
+		const selectedPath = await window.BloopAPI.selectFolder()
+		if (selectedPath) {
+			setFolderPath(selectedPath)
+			await window.BloopAPI.setStoredFolder(selectedPath) // Save to persistent storage
+		}
+	}
+
+	const handleClearFolder = async () => {
+		setFolderPath('') // Clear the state
+		await window.BloopAPI.setStoredFolder('') // Clear from persistent storage
+	}
+
 	return (
 		<div className={styles.wrapper}>
 			<main className={styles.main}>
-				<div className={styles.header}>
-					<h1 className={styles.headerText}>NextJS + Electron Boilerplate</h1>
-					<h4 className={styles.headerSubText}>
-						That one boilerplate you couldn{"'"}t find, until now.
-					</h4>
-				</div>
-				<Image
-					src={Menhera.src}
-					className={styles.menhera}
-					alt="menhera"
-					width={200}
-					height={200}
-				/>
-				<div className={styles.note}>
-					<EditSVG />
-					Get started by editting frontend/app/page.tsx
-				</div>
+				{!folderPath && (
+					<div className={styles.header}>
+						<Image
+							src={logo.src}
+							alt="logo"
+							layout="responsive"
+							width={1132} // Desired aspect ratio width
+							height={196} // Desired aspect ratio height
+						/>
+					</div>
+				)}
+				{!folderPath && (
+					<div className={styles.body}>
+						<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+							<p>Select a folder:</p>
+							<Button
+								style={{ width: '40px', height: '40px' }}
+								onClick={handleSelectFolder}
+							>
+								<FontAwesomeIcon icon={faFolder} style={{ color: '#000000' }} />
+							</Button>
+						</div>
+					</div>
+				)}
+
+				{folderPath && <DataTableDemo></DataTableDemo>}
+				{folderPath && (
+					<div className={styles.header}>
+						<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+							<p>Chosen folder: {folderPath}</p>
+							<Button onClick={handleClearFolder}>Clear Folder</Button>
+						</div>
+					</div>
+				)}
 				<footer className={styles.footer}>
-					{'<'}/{'>'} with ♥
+					{folderPath
+						? 'Achievement hunter by < / > ktrocks3'
+						: '< / > ktrocks3'}
 				</footer>
 			</main>
 		</div>

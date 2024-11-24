@@ -12,8 +12,18 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"noFallthroughCasesInSwitch": true,
-		"outDir": "build"
+		"outDir": "build",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
 	},
-	"include": ["**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": [
+		"**/*.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
 }

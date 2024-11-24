@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .wrapper {
 	position: absolute;
 	top: 0;
@@ -29,10 +33,6 @@
 	text-align: center;
 }
 
-.menhera {
-	margin: 50px 0;
-	border-radius: 50%;
-}
 
 .headerText {
 	color: var(--cyan);
@@ -83,3 +83,9 @@
 	margin-top: 20px;
 	color: rgba(255, 255, 255, 0.5);
 }
+
+.body {
+  font-family: var(--font-normal);
+	font-size: 2rem;
+}
+

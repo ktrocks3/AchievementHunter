@@ -24,10 +24,10 @@
 				"name": "next"
 			}
 		],
-		"baseUrl": "./app",
+		"baseUrl": "./frontend",
 		"paths": {
 			"@/*": [
-				"./*"
+				"./app/src/*"
 			]
 		}
 	},
