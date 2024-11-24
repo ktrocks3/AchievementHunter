@@ -25,88 +25,149 @@ import {
 	TableHeader,
 	TableRow,
 } from './src/components/ui/table'
+import so_bold from '@/assets/Sobold.webp'
+import so_fun from '@/assets/Sofun.webp'
+import so_creative from '@/assets/Socreative.webp'
+import so_smart from '@/assets/Sosmart.webp'
+import so_wealthy from '@/assets/Sowealthy.webp'
 
-const data: Payment[] = [
+// Mapping between keys and icons
+const ICON_MAP: { [key: string]: string } = {
+	_bold: so_bold.src,
+	_fun: so_fun.src,
+	_creative: so_creative.src,
+	_smarts: so_smart.src,
+	_wealth: so_wealthy.src,
+}
+
+// Define the type for the data structure
+export type TableData = {
+	n: number;
+	event: string;
+	characters: string;
+	locationType: string;
+	option1Success: string; // Icon or identifier for success
+	option1Failure: string; // Icon or identifier for failure
+	option2Success: string;
+	option2Failure: string;
+};
+
+// Sample data
+const data: TableData[] = [
 	{
-		id: 'm5gr84i9',
-		amount: 316,
-		status: 'success',
-		email: 'ken99@yahoo.com',
+		n: 1,
+		event: 'Battle at Dawn',
+		characters: 'Hero, Villain',
+		locationType: 'Forest',
+		option1Success: '_bold',
+		option1Failure: '_fun',
+		option2Success: '_creative',
+		option2Failure: '_smarts',
 	},
 	{
-		id: '3u1reuv4',
-		amount: 242,
-		status: 'success',
-		email: 'Abe45@gmail.com',
-	},
-	{
-		id: 'derv1ws0',
-		amount: 837,
-		status: 'processing',
-		email: 'Monserrat44@gmail.com',
-	},
-	{
-		id: '5kma53ae',
-		amount: 874,
-		status: 'success',
-		email: 'Silas22@gmail.com',
-	},
-	{
-		id: 'bhqecj4p',
-		amount: 721,
-		status: 'failed',
-		email: 'carmella@hotmail.com',
+		n: 2,
+		event: 'Mystery of the Cave',
+		characters: 'Detective, Ghost',
+		locationType: 'Cave',
+		option1Success: '_fun',
+		option1Failure: '_wealth',
+		option2Success: '_bold',
+		option2Failure: '_creative',
 	},
 ]
 
-export type Payment = {
-	id: string
-	amount: number
-	status: 'pending' | 'processing' | 'success' | 'failed'
-	email: string
-}
+// Define the columns
+export const columns: ColumnDef<TableData>[] = [
+	{
+		accessorKey: 'n',
+		header: 'N',
+		cell: ({ row }) => <div>{row.getValue('n')}</div>,
+	},
+	{
+		accessorKey: 'event',
+		header: 'Event',
+		cell: ({ row }) => <div>{row.getValue('event')}</div>,
+	},
+	{
+		accessorKey: 'characters',
+		header: 'Characters',
+		cell: ({ row }) => <div>{row.getValue('characters')}</div>,
+	},
+	{
+		accessorKey: 'locationType',
+		header: 'Location/Type',
+		cell: ({ row }) => <div>{row.getValue('locationType')}</div>,
+	},
+	{
+		accessorKey: 'option1Success',
+		header: 'Option1 Success',
+		cell: ({ row }) => {
+			const iconKey = row.getValue('option1Success') as string
+			const iconPath = ICON_MAP[iconKey]
 
-export const columns: ColumnDef<Payment>[] = [
-	{
-		id: 'select',
-		enableSorting: false,
-		enableHiding: false,
-	},
-	{
-		accessorKey: 'status',
-		header: 'Status',
-		cell: ({ row }) => (
-			<div className="capitalize">{row.getValue('status')}</div>
-		),
-	},
-	{
-		accessorKey: 'email',
-		header: ({ column }) => {
 			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Email
-					<ArrowUpDown />
-				</Button>
+				<div>
+					{iconPath ? (
+						<img src={iconPath} alt={iconKey} style={{ width: 32, height: 32 }} />
+					) : (
+						<span>Unknown</span>
+					)}
+				</div>
 			)
 		},
-		cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
 	},
 	{
-		accessorKey: 'amount',
-		header: () => <div className="text-right">Amount</div>,
+		accessorKey: 'option1Failure',
+		header: 'Option1 Failure',
 		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue('amount'))
+			const iconKey = row.getValue('option1Failure') as string
+			const iconPath = ICON_MAP[iconKey]
 
-			// Format the amount as a dollar amount
-			const formatted = new Intl.NumberFormat('en-US', {
-				style: 'currency',
-				currency: 'USD',
-			}).format(amount)
+			return (
+				<div>
+					{iconPath ? (
+						<img src={iconPath} alt={iconKey} style={{ width: 32, height: 32 }} />
+					) : (
+						<span>Unknown</span>
+					)}
+				</div>
+			)
+		},
+	},
+	{
+		accessorKey: 'option2Success',
+		header: 'Option2 Success',
+		cell: ({ row }) => {
+			const iconKey = row.getValue('option2Success') as string
+			const iconPath = ICON_MAP[iconKey]
 
-			return <div className="text-right font-medium">{formatted}</div>
+			return (
+				<div>
+					{iconPath ? (
+						<img src={iconPath} alt={iconKey} style={{ width: 32, height: 32 }} />
+					) : (
+						<span>Unknown</span>
+					)}
+				</div>
+			)
+		},
+	},
+	{
+		accessorKey: 'option2Failure',
+		header: 'Option2 Failure',
+		cell: ({ row }) => {
+			const iconKey = row.getValue('option2Failure') as string
+			const iconPath = ICON_MAP[iconKey]
+
+			return (
+				<div>
+					{iconPath ? (
+						<img src={iconPath} alt={iconKey} style={{ width: 32, height: 32 }} />
+					) : (
+						<span>Unknown</span>
+					)}
+				</div>
+			)
 		},
 	},
 ]
@@ -141,10 +202,10 @@ export function DataTableDemo() {
 		<div className="w-full">
 			<div className="flex items-center py-4">
 				<Input
-					placeholder="Filter emails..."
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
+					placeholder="Filter events..."
+					value={(table.getColumn('event')?.getFilterValue() as string) ?? ''}
 					onChange={(event) =>
-						table.getColumn('email')?.setFilterValue(event.target.value)
+						table.getColumn('event')?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
