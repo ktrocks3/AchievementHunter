@@ -1,17 +1,16 @@
+import argparse
 import json
 import os
 import re
 import pandas as pd
 
 # File paths
-log_folder = 'C:\\Users\\Kishan\\Documents\\Personal\\mplog'
-log_state_file = 'readlogs.txt'
-output_file = 'local.xlsx'
-input_file = 'Outcomes.xls'
+log_state_file = 'backend/python/readlogs.txt'
+output_file = 'backend/python/local.xlsx'
+input_file = 'backend/python/Outcomes.xls'
 
 # Regex pattern
 pattern = r"Output chosen: (Option[12](Success|Failure)) for (\d+):"
-
 
 def load_or_initialize_dataframe():
     """Load the existing DataFrame or create a new one with added columns."""
@@ -24,13 +23,11 @@ def load_or_initialize_dataframe():
         create_output(df)
     return df
 
-
 def create_output(df):
     """Add boolean columns to the DataFrame and save it."""
     for col in ['O1S', 'O1F', 'O2S', 'O2F']:
         df[col] = False
     df.to_excel(output_file, index=False)
-
 
 def load_seen_logs():
     """Load the list of processed log files."""
@@ -39,12 +36,10 @@ def load_seen_logs():
             return json.load(f)
     return []
 
-
 def save_logs_state(seen_logs):
     """Save the updated list of processed log files."""
     with open(log_state_file, 'w') as f:
         json.dump(seen_logs, f)
-
 
 def read_logs(df, filepath, seen_logs):
     """Read and process logs from the specified folder."""
@@ -65,9 +60,19 @@ def read_logs(df, filepath, seen_logs):
                     df.loc[df['N'] == number, option] = True
     return df
 
-
-# Main workflow
 if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Process log files and update the DataFrame.")
+    parser.add_argument(
+        '-l', '--log_folder',
+        type=str,
+        required=True,
+        help='Path to the folder containing log files.'
+    )
+    args = parser.parse_args()
+    log_folder = args.log_folder
+
+    # Verify that the provided log folder exists
     if not os.path.isdir(log_folder):
         raise FileNotFoundError(f"The folder '{log_folder}' does not exist.")
 

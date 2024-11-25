@@ -16,6 +16,10 @@ export interface IBloopAPI {
 	async
 
 	selectFolder(): any
+
+	async
+
+	runScript(scriptPath: string, args: string[]): any
 }
 
 declare global {

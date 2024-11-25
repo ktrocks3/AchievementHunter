@@ -28,16 +28,46 @@ export default function Home() {
 			setFolderPath(selectedPath)
 			await window.BloopAPI.setStoredFolder(selectedPath) // Save to persistent storage
 		}
+		try {
+			const scriptPath = 'FindMissingEvents.py'
+			const args = ['--log_folder', selectedPath]
+			console.log(args, "ASDF")
+			const result = await window.BloopAPI.runScript(scriptPath, args)
+			console.log('Script output:', result)
+		} catch (error) {
+			console.error('Error running script:', error)
+		}
+
 	}
 
- 	const banana = async () => {
-
-
+	const refreshFolder = async () => {
+		try {
+			const scriptPath = 'FindMissingEvents.py'
+			const args = ['--log_folder', folderPath]
+			console.log(args)
+			const result = await window.BloopAPI.runScript(scriptPath, args)
+			console.log('Script output:', result)
+		} catch (error) {
+			console.error('Error running script:', error)
+		}
 	}
+
 
 	const handleClearFolder = async () => {
-		setFolderPath('') // Clear the state
+		setFolderPath('') // Clear the state and the local file
+
+
+		try {
+			const scriptPath = 'deletelocal.py'
+			const args = []
+			const result = await window.BloopAPI.runScript(scriptPath, args)
+			console.log('Script output:', result)
+		} catch (error) {
+			console.error('Error running script:', error)
+		}
+
 		await window.BloopAPI.setStoredFolder('') // Clear from persistent storage
+
 	}
 
 	return (
@@ -75,7 +105,7 @@ export default function Home() {
 							<Button onClick={handleClearFolder}>Clear Folder</Button>
 						</div>
 
-						<Button onClick={banana}>Banana</Button>
+						<Button onClick={refreshFolder}>Refresh</Button>
 					</div>
 				)}
 

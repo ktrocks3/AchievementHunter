@@ -7,6 +7,8 @@ import electronIsDev from 'electron-is-dev'
 import ElectronStore from 'electron-store'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import { spawn } from 'child_process';
+
 
 // Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url)
@@ -135,3 +137,31 @@ app.on('activate', () => {
 ipcMain.handle('sample:ping', () => {
 	return 'pong'
 })
+
+ipcMain.handle('run-script', async (event, scriptPath: string, args: string[]) => {
+  return new Promise((resolve, reject) => {
+		console.log("Banana4")
+    const absoluteScriptPath = path.resolve(__dirname, '../python/', scriptPath);
+		console.log(absoluteScriptPath)
+		const pythonProcess = spawn('python', [absoluteScriptPath, ...args]);
+
+    let output = '';
+    let errorOutput = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve(output);
+      } else {
+        reject(new Error(`Script exited with code ${code}: ${errorOutput}`));
+      }
+    });
+  });
+});
