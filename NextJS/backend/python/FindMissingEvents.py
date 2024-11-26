@@ -5,7 +5,6 @@ import re
 import pandas as pd
 
 # File paths
-log_state_file = 'backend/python/readlogs.txt'
 output_file = 'backend/python/local.xlsx'
 input_file = 'backend/python/Outcomes.xls'
 
@@ -29,24 +28,10 @@ def create_output(df):
         df[col] = False
     df.to_excel(output_file, index=False)
 
-def load_seen_logs():
-    """Load the list of processed log files."""
-    if os.path.isfile(log_state_file):
-        with open(log_state_file, 'r') as f:
-            return json.load(f)
-    return []
 
-def save_logs_state(seen_logs):
-    """Save the updated list of processed log files."""
-    with open(log_state_file, 'w') as f:
-        json.dump(seen_logs, f)
-
-def read_logs(df, filepath, seen_logs):
+def read_logs(df, filepath):
     """Read and process logs from the specified folder."""
     for file in os.listdir(filepath):
-        if file in seen_logs:
-            continue
-        seen_logs.append(file)
         full_path = os.path.join(filepath, file)
         with open(full_path, 'r') as f:
             lines = [line.strip() for line in f.readlines()]
@@ -79,12 +64,10 @@ if __name__ == "__main__":
     # Load or initialize data
     df = load_or_initialize_dataframe()
 
-    # Load seen logs
-    seen_logs = load_seen_logs()
 
     # Process logs and update the DataFrame
-    df = read_logs(df, log_folder, seen_logs)
+    df = read_logs(df, log_folder)
 
-    # Save updated state
-    save_logs_state(seen_logs)
-    df.to_excel(output_file, index=False)
+
+    # Convert the DataFrame to JSON and output it
+    print(df.to_json(orient="records"))

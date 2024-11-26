@@ -7,6 +7,12 @@ const nextConfig = {
 	images: {
 		unoptimized: true,
 	},
+	// Enable source maps for better debugging
+	productionBrowserSourceMaps: true,
+	// Disable Fast Refresh temporarily
+	experimental: {
+		reactRefresh: false,
+	},
 	// Configure SVGR
 	webpack(config) {
 		const fileLoaderRule = config.module.rules.find(rule =>
