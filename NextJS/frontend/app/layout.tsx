@@ -1,9 +1,9 @@
 import './globals.css'
 
 export const metadata = {
-	title: 'NextJS + Electron Boilerplate',
+	title: 'Achievement Hunter',
 	description:
-		'A neat boilerplate for building Electron apps, with NextJS at the frontend and pre-configured with a bunch of handy development tools.',
+		'For monster prom, to get all achievements',
 }
 
 export default function RootLayout({

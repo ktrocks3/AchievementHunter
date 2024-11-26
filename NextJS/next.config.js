@@ -1,23 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	output: 'export',
 	trailingSlash: true,
-	distDir: 'build',
 	assetPrefix: process.env.NODE_ENV === 'production' ? '.' : undefined,
 	images: {
 		unoptimized: true,
 	},
-	// Enable source maps for better debugging
 	productionBrowserSourceMaps: true,
-	// Disable Fast Refresh temporarily
-	experimental: {
-		reactRefresh: false,
-	},
-	// Configure SVGR
 	webpack(config) {
 		const fileLoaderRule = config.module.rules.find(rule =>
 			rule.test?.test?.('.svg')
-		)
+		);
 		config.module.rules.push(
 			{
 				...fileLoaderRule,
@@ -30,10 +22,10 @@ const nextConfig = {
 				resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
 				use: ['@svgr/webpack'],
 			}
-		)
-		fileLoaderRule.exclude = /\.svg$/i
-		return config
+		);
+		fileLoaderRule.exclude = /\.svg$/i;
+		return config;
 	},
-}
+};
 
-export default nextConfig
+export default nextConfig;

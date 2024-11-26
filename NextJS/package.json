@@ -1,14 +1,31 @@
 {
-	"name": "nextjs-electron-boilerplate",
+	"build": {
+		"appId": "com.example.achievement-hunter",
+		"productName": "Achievment Hunter by Ktrocks3",
+		"files": [
+			"backend/build/**/*",
+			"frontend/build/**/*",
+			"node_modules/**/*",
+			"package.json"
+		],
+		"directories": {
+			"output": "dist"
+		},
+		"win": {
+			"target": "nsis",
+			"icon": "assets/icon.ico"
+		}
+	},
+	"name": "achievment-hunter",
 	"version": "3.1.0",
 	"main": "backend/build/main.js",
 	"private": true,
 	"type": "module",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/DarkGuy10/NextJS-Electron-Boilerplate.git"
+		"url": "https://github.com/ktrocks3/AchievementHunter.git"
 	},
-	"author": "DarkGuy10 <HarperBurn@protonmail.ch>",
+	"author": "ktrocks3 <kishan@kishant.nl>",
 	"license": "MIT",
 	"scripts": {
 		"frontend:dev": "next dev frontend",
