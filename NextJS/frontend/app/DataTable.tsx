@@ -30,6 +30,14 @@ import so_creative from '@/assets/Socreative.webp'
 import so_smart from '@/assets/Sosmart.webp'
 import so_wealthy from '@/assets/Sowealthy.webp'
 import so_charming from '@/assets/Socharming.webp'
+import damien from '@/assets/damien.webp'
+import polly from '@/assets/polly.webp'
+import vera from '@/assets/vera.webp'
+import scott from '@/assets/scott.webp'
+import miranda from '@/assets/miranda.webp'
+import zoe from '@/assets/zoe.webp'
+import liam from '@/assets/liam.webp'
+import calculester from '@/assets/calculester.webp'
 
 // Mapping between keys and icons
 const ICON_MAP: { [key: string]: string } = {
@@ -39,11 +47,14 @@ const ICON_MAP: { [key: string]: string } = {
 	_smarts: so_smart.src,
 	_money: so_wealthy.src,
 	_charm: so_charming.src,
-	_damien: so_charming.src,
-	_miranda: so_charming.src,
-	_scott: so_charming.src,
-	_polly: so_charming.src,
-	_vera: so_charming.src,
+	_damien: damien.src,
+	_miranda: miranda.src,
+	_scott: scott.src,
+	_polly: polly.src,
+	_vera: vera.src,
+	_liam: liam.src,
+	_calculester: calculester.src,
+	_zoe: zoe.src,
 }
 
 // Define the type for the data structure
